@@ -4,6 +4,7 @@ export function getApiBaseCandidates() {
   const fromQuery = new URLSearchParams(location.search).get("api");
   const candidates = [
     fromQuery,
+    "https://nga-share-api.onrender.com",
     `${location.origin}`,
     "http://localhost:3000",
     "http://127.0.0.1:3000",
