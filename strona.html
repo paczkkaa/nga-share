@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGA Share - Nowoczesne przesylanie plikow</title>
+  <meta name="theme-color" content="#07090f" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="gradient-orb orb-1"></div>
+  <div class="gradient-orb orb-2"></div>
+
+  <main class="layout">
+    <header class="hero card">
+      <div class="hero-copy">
+        <p class="badge">NGA SHARE</p>
+        <h1>Przesylaj pliki szybko ale nie badz cwelem.</h1>
+        <p class="muted">
+          Wybierz pliki, ustaw wygasanie, udostepnij link znajomym i monitoruj pobrania.
+          Ten front-end jest gotowy pod podpiecie backendu API.
+        </p>
+        <div class="quick-stats">
+          <article>
+            <p class="value" id="statFiles">0</p>
+            <p class="label">Plikow</p>
+          </article>
+          <article>
+            <p class="value" id="statSize">0 MB</p>
+            <p class="label">Lacznie</p>
+          </article>
+          <article>
+            <p class="value" id="statDownloads">0</p>
+            <p class="label">Pobran</p>
+          </article>
+        </div>
+        <p class="muted status-line">Tryb: <span id="modeBadge">Lokalny</span></p>
+      </div>
+
+      <section class="upload card-soft" id="dropzone" aria-label="Przeslij pliki">
+        <input id="fileInput" class="sr-only" type="file" multiple />
+        <label class="cta cta-label" id="pickBtn" for="fileInput" role="button" tabindex="0">Wybierz pliki</label>
+        <p class="muted center">lub przeciagnij i upusc tutaj</p>
+        <div class="upload-options">
+          <label>
+            Wygasa po
+            <select id="expirySelect">
+              <option value="never">Nigdy</option>
+              <option value="1d">1 dniu</option>
+              <option value="7d" selected>7 dniach</option>
+              <option value="30d">30 dniach</option>
+            </select>
+          </label>
+          <label>
+            Tag
+            <input id="tagInput" type="text" placeholder="np. projekt, foto" maxlength="24" />
+          </label>
+        </div>
+        <div class="queue" id="uploadQueue" aria-live="polite"></div>
+      </section>
+    </header>
+
+    <section class="controls card">
+      <div class="control-grid">
+        <label>
+          Szukaj
+          <input id="searchInput" type="search" placeholder="Nazwa, tag, typ" />
+        </label>
+        <label>
+          Typ
+          <select id="typeFilter">
+            <option value="all">Wszystkie</option>
+            <option value="image">Obrazy</option>
+            <option value="video">Wideo</option>
+            <option value="audio">Audio</option>
+            <option value="doc">Dokumenty</option>
+            <option value="other">Inne</option>
+          </select>
+        </label>
+        <label>
+          Sortowanie
+          <select id="sortSelect">
+            <option value="newest">Najnowsze</option>
+            <option value="oldest">Najstarsze</option>
+            <option value="largest">Najwieksze</option>
+            <option value="smallest">Najmniejsze</option>
+            <option value="name">Nazwa A-Z</option>
+            <option value="downloads">Najwiecej pobran</option>
+          </select>
+        </label>
+      </div>
+      <div class="toolbar">
+        <button id="exportBtn" type="button">Eksport CSV</button>
+        <button id="clearExpiredBtn" type="button">Usun wygasle</button>
+        <button id="clearAllBtn" type="button" class="danger">Wyczysc wszystko</button>
+      </div>
+    </section>
+
+    <section class="library" id="library"></section>
+  </main>
+
+  <template id="fileCardTemplate">
+    <article class="file-card card-soft">
+      <div class="thumb-wrap">
+        <img class="thumb" alt="Podglad pliku" hidden />
+        <div class="file-icon" aria-hidden="true"></div>
+      </div>
+      <div class="file-main">
+        <div class="file-head">
+          <h3 class="file-name"></h3>
+          <span class="pill file-type"></span>
+        </div>
+        <p class="meta"></p>
+        <div class="meta-row">
+          <span class="pill tag-pill" hidden></span>
+          <span class="pill expiry-pill"></span>
+          <span class="pill download-pill"></span>
+        </div>
+        <div class="actions">
+          <button type="button" data-action="download">Pobierz</button>
+          <button type="button" data-action="copy">Kopiuj link</button>
+          <button type="button" data-action="share">Udostepnij</button>
+          <button type="button" data-action="delete" class="danger">Usun</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
